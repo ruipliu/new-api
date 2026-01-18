@@ -23,11 +23,11 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
   const mainNavLinks = useMemo(() => {
     // 默认配置，如果没有传入配置则显示所有模块
     const defaultModules = {
-      home: true,
+      home: false,
       console: true,
       pricing: true,
       docs: true,
-      about: true,
+      about: false,
     };
 
     // 使用传入的配置或默认配置
@@ -45,20 +45,15 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
         to: '/console',
       },
       {
-        text: t('模型广场'),
+        text: t('模型价格'),
         itemKey: 'pricing',
         to: '/pricing',
       },
-      ...(docsLink
-        ? [
-            {
-              text: t('文档'),
-              itemKey: 'docs',
-              isExternal: true,
-              externalLink: docsLink,
-            },
-          ]
-        : []),
+      {
+        text: t('文档'),
+        itemKey: 'docs',
+        to: '/docs',
+      },,
       {
         text: t('关于'),
         itemKey: 'about',

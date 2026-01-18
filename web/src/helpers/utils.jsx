@@ -47,8 +47,9 @@ export function isRoot() {
 }
 
 export function getSystemName() {
+  return 'LLaAPI';
   let system_name = localStorage.getItem('system_name');
-  if (!system_name) return 'New API';
+  if (!system_name) return 'LLaAPI';
   return system_name;
 }
 

@@ -197,7 +197,7 @@ const FooterBar = () => {
 
           <div className='text-sm'>
             <span className='!text-semi-color-text-1'>
-              {t('设计与开发由')}{' '}
+              {t('开发基于')}{' '}
             </span>
             <a
               href='https://github.com/QuantumNous/new-api'
@@ -227,7 +227,7 @@ const FooterBar = () => {
             dangerouslySetInnerHTML={{ __html: footer }}
           ></div>
           <div className='absolute bottom-2 right-4 text-xs !text-semi-color-text-2 opacity-70'>
-            <span>{t('设计与开发由')} </span>
+            <span>{t('开发基于')} </span>
             <a
               href='https://github.com/QuantumNous/new-api'
               target='_blank'

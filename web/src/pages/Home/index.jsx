@@ -170,9 +170,9 @@ const Home = () => {
                     className={`text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-semi-color-text-0 leading-tight ${isChinese ? 'tracking-wide md:tracking-wider' : ''}`}
                   >
                     <>
-                      {t('统一的')}
-                      <br />
-                      <span className='shine-text'>{t('大模型接口网关')}</span>
+                      {/* {t('统一的')}
+                      <br /> */}
+                      <span className='shine-text'>{t('全球大模型接口平台')}</span>
                     </>
                   </h1>
                   <p className='text-base md:text-lg lg:text-xl text-semi-color-text-1 mt-4 md:mt-6 max-w-xl'>
@@ -224,32 +224,15 @@ const Home = () => {
                       {t('获取密钥')}
                     </Button>
                   </Link>
-                  {isDemoSiteMode && statusState?.status?.version ? (
+                  <Link to='/docs'>
                     <Button
                       size={isMobile ? 'default' : 'large'}
                       className='flex items-center !rounded-3xl px-6 py-2'
-                      icon={<IconGithubLogo />}
-                      onClick={() =>
-                        window.open(
-                          'https://github.com/QuantumNous/new-api',
-                          '_blank',
-                        )
-                      }
+                      icon={<IconFile />}
                     >
-                      {statusState.status.version}
+                      {t('文档')}
                     </Button>
-                  ) : (
-                    docsLink && (
-                      <Button
-                        size={isMobile ? 'default' : 'large'}
-                        className='flex items-center !rounded-3xl px-6 py-2'
-                        icon={<IconFile />}
-                        onClick={() => window.open(docsLink, '_blank')}
-                      >
-                        {t('文档')}
-                      </Button>
-                    )
-                  )}
+                  </Link>
                 </div>
 
                 {/* 框架兼容性图标 */}
@@ -263,9 +246,9 @@ const Home = () => {
                     </Text>
                   </div>
                   <div className='flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto px-4'>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
+                    {/* <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
                       <Moonshot size={40} />
-                    </div>
+                    </div> */}
                     <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
                       <OpenAI size={40} />
                     </div>
