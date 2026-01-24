@@ -2,7 +2,7 @@
 name: 报告问题
 about: 使用简练详细的语言描述你遇到的问题
 title: ''
-labels: bug
+labels: bug, enhancement
 assignees: ''
 
 ---
