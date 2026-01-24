@@ -15,7 +15,7 @@ env:
   IMAGE_NAME: new-api
   # This constructs the base path: asia-southeast1-docker.pkg.dev/project/repo/image
   GCP_REGISTRY_HOST: asia-southeast1-docker.pkg.dev
-  FULL_IMAGE_PATH: asia-southeast1-docker.pkg.dev/project-7980c6e7-14f0-4ff0-ac9/new-api
+  FULL_IMAGE_PATH: asia-southeast1-docker.pkg.dev/project-7980c6e7-14f0-4ff0-ac9/new-api/new-api
 
 jobs:
   build_single_arch:
