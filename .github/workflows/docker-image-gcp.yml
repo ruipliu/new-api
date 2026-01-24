@@ -58,8 +58,8 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           # You create this "provider" once in GCP Console
-          workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-          service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/865218081826/locations/global/workloadIdentityPools/new-api-ruipliu/providers/github'
+          service_account: 'new-api-service-acc@project-7980c6e7-14f0-4ff0-ac9.iam.gserviceaccount.com'
 
       - name: Log in to GCP Artifact Registry
         run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
