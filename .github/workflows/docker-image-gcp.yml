@@ -37,6 +37,9 @@ jobs:
       packages: write
       id-token: write
 
+    outputs:
+      resolved_tag: ${{ steps.resolve.outputs.tag }}
+
     steps:
       - name: Check out (shallow)
         uses: actions/checkout@v4
@@ -44,6 +47,7 @@ jobs:
           fetch-depth: 1
 
       - name: Resolve tag & generate tag list
+        id: resolve
         run: |
           # ... (Your existing fetch logic) ...
           git fetch --tags --force --depth=1
@@ -75,6 +79,8 @@ jobs:
           
           # 3. Output variables
           echo "TAG=$TAG" >> $GITHUB_ENV
+          # Set as an output for the NEXT job
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "DOCKER_TAGS=$TAG_LIST" >> $GITHUB_ENV
 
           echo "Tags to build: $TAG_LIST"
@@ -152,11 +158,11 @@ jobs:
             ${{ env.FULL_IMAGE_PATH }}:latest-arm64
   deploy:
     name: Deploy to Cloud Run
-    needs: [ build_single_arch ] # Wait for build to finish
-    environment: prod
+    needs: [build_single_arch]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    environment: prod
     permissions:
+      contents: read
       id-token: write
 
     steps:
@@ -169,13 +175,9 @@ jobs:
           service_account: 'new-api-service-acc@project-7980c6e7-14f0-4ff0-ac9.iam.gserviceaccount.com'
 
       - name: Deploy to Cloud Run
-        id: deploy
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
           service: 'new-api'
           region: 'asia-southeast1'
-          # Use the TAG established in the previous job.
-          # Note: You'll need to pass the TAG as an output from the build job
-          # OR use the same logic to re-calculate it here.
-          image: ${{ env.FULL_IMAGE_PATH }}:${{ env.TAG }}-amd64
-          flags: '--allow-unauthenticated'
+          # CRITICAL: This uses the immutable tag, NOT 'latest'
+          image: ${{ env.FULL_IMAGE_PATH }}:${{ needs.build_single_arch.outputs.resolved_tag }}-amd64
