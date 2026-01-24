@@ -43,13 +43,41 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Resolve tag & write VERSION
+      - name: Resolve tag & generate tag list
         run: |
+          # ... (Your existing fetch logic) ...
           git fetch --tags --force --depth=1
-          TAG=${GITHUB_REF#refs/tags/}
+        
+          # 1. Define Timestamp and Base TAG
+          TS=$(date +%Y%m%d-%H%M%S)
+          
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            # Is a Tag -> Use tag name
+            TAG=${GITHUB_REF#refs/tags/}
+            IS_RELEASE=true
+          else
+            # Is a Branch -> Use branch-timestamp
+            TAG=${GITHUB_REF#refs/heads/}
+            TAG=${TAG//\//-}
+            TAG="${TAG}-${TS}"
+            IS_RELEASE=false
+          fi
+
+        # 2. Construct the list of docker tags
+        # Start with the specific version tag (Always needed)
+        # Note: $FULL_IMAGE_PATH must be available in your job env
+          TAG_LIST="${FULL_IMAGE_PATH}:${TAG}-${{ matrix.arch }}"
+        
+          # Only append 'latest' if this is a real Release Tag
+          if [ "$IS_RELEASE" = true ]; then
+            TAG_LIST="${TAG_LIST},${FULL_IMAGE_PATH}:latest-${{ matrix.arch }}"
+          fi
+          
+          # 3. Output variables
           echo "TAG=$TAG" >> $GITHUB_ENV
-          echo "$TAG" > VERSION
-          echo "Building tag: $TAG for ${{ matrix.arch }}"
+          echo "DOCKER_TAGS=$TAG_LIST" >> $GITHUB_ENV
+
+          echo "Tags to build: $TAG_LIST"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -77,10 +105,8 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           push: true
-          # Note: We append the architecture to the tag to prevent overwriting
-          tags: |
-            ${{ env.FULL_IMAGE_PATH }}:${{ env.TAG }}-${{ matrix.arch }}
-            ${{ env.FULL_IMAGE_PATH }}:latest-${{ matrix.arch }}
+          # Use the dynamic list we created in the previous step
+          tags: ${{ env.DOCKER_TAGS }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
