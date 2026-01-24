@@ -1,6 +1,7 @@
 name: Publish Docker image (GCP Artifact Registry)
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - '*'
