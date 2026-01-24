@@ -176,7 +176,3 @@ jobs:
           # OR use the same logic to re-calculate it here.
           image: ${{ env.FULL_IMAGE_PATH }}:${{ env.TAG }}-amd64
           flags: '--allow-unauthenticated'
-
-      - name: Show Output
-        run:
-          echo "Deployment complete! URL: ${{ steps.deploy.outputs.url }}"
