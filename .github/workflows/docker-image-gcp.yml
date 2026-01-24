@@ -63,10 +63,10 @@ jobs:
             IS_RELEASE=false
           fi
 
-        # 2. Construct the list of docker tags
-        # Start with the specific version tag (Always needed)
-        # Note: $FULL_IMAGE_PATH must be available in your job env
-          TAG_LIST="${FULL_IMAGE_PATH}:${TAG}-${{ matrix.arch }}"
+          # 2. Construct the list of docker tags
+          # Start with the specific version tag (Always needed)
+          # Note: $FULL_IMAGE_PATH must be available in your job env
+          TAG_LIST="${{ env.FULL_IMAGE_PATH }}:${TAG}-${{ matrix.arch }}"
         
           # Only append 'latest' if this is a real Release Tag
           if [ "$IS_RELEASE" = true ]; then
