@@ -1,0 +1,116 @@
+name: Publish Docker image (GCP Artifact Registry)
+
+on:
+  push:
+    tags:
+      - '*'
+
+# Global configuration for GCP
+env:
+  # CHANGE THESE TO MATCH YOUR GCP SETUP
+  GCP_REGION: asia-southeast1
+  GCP_PROJECT: project-7980c6e7-14f0-4ff0-ac9/new-api
+  GCP_REPO_NAME: new-api
+  IMAGE_NAME: new-api
+  # This constructs the base path: asia-southeast1-docker.pkg.dev/project/repo/image
+  GCP_REGISTRY_HOST: asia-southeast1-docker.pkg.dev
+  FULL_IMAGE_PATH: asia-southeast1-docker.pkg.dev/project-7980c6e7-14f0-4ff0-ac9/new-api
+
+jobs:
+  build_single_arch:
+    name: Build & push (${{ matrix.arch }}) [native]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            platform: linux/amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Check out (shallow)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Resolve tag & write VERSION
+        run: |
+          git fetch --tags --force --depth=1
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "$TAG" > VERSION
+          echo "Building tag: $TAG for ${{ matrix.arch }}"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # --- CHANGED: Login to GCP ---
+      - name: Log in to GCP Artifact Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GCP_REGISTRY_HOST }}
+          username: _json_key
+          password: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Extract metadata (labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.FULL_IMAGE_PATH }}
+
+      # --- CHANGED: Push to GCP Paths ---
+      - name: Build & push single-arch
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          push: true
+          # Note: We append the architecture to the tag to prevent overwriting
+          tags: |
+            ${{ env.FULL_IMAGE_PATH }}:${{ env.TAG }}-${{ matrix.arch }}
+            ${{ env.FULL_IMAGE_PATH }}:latest-${{ matrix.arch }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+          sbom: false
+
+  create_manifests:
+    name: Create multi-arch manifests (GCP)
+    needs: [build_single_arch]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Extract tag
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      # --- CHANGED: Login to GCP (Required for manifest creation too) ---
+      - name: Log in to GCP Artifact Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GCP_REGISTRY_HOST }}
+          username: _json_key
+          password: ${{ secrets.GCP_SA_KEY }}
+
+      # --- CHANGED: Point manifest creation to GCP images ---
+      - name: Create & push manifest (GCP - version)
+        run: |
+          docker buildx imagetools create \
+            -t ${{ env.FULL_IMAGE_PATH }}:${TAG} \
+            ${{ env.FULL_IMAGE_PATH }}:${TAG}-amd64 \
+            ${{ env.FULL_IMAGE_PATH }}:${TAG}-arm64
+
+      - name: Create & push manifest (GCP - latest)
+        run: |
+          docker buildx imagetools create \
+            -t ${{ env.FULL_IMAGE_PATH }}:latest \
+            ${{ env.FULL_IMAGE_PATH }}:latest-amd64 \
+            ${{ env.FULL_IMAGE_PATH }}:latest-arm64
