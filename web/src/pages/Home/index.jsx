@@ -37,6 +37,7 @@ import {
   IconPlay,
   IconFile,
   IconCopy,
+  IconSetting,
 } from '@douyinfe/semi-icons';
 import { Link } from 'react-router-dom';
 import NoticeModal from '../../components/layout/NoticeModal';
@@ -75,8 +76,9 @@ const Home = () => {
   const isMobile = useIsMobile();
   const isDemoSiteMode = statusState?.status?.demo_site_enabled || false;
   const docsLink = statusState?.status?.docs_link || '';
-  const serverAddress =
-    statusState?.status?.server_address || `${window.location.origin}`;
+  const serverAddress = "https://llaapi.com:3000";
+    // statusState?.status?.server_address || `${window.location.origin}`;
+
   const endpointItems = API_ENDPOINTS.map((e) => ({ value: e }));
   const [endpointIndex, setEndpointIndex] = useState(0);
   const isChinese = i18n.language.startsWith('zh');
@@ -160,23 +162,24 @@ const Home = () => {
           {/* Banner 部分 */}
           <div className='w-full border-b border-semi-color-border min-h-[500px] md:min-h-[600px] lg:min-h-[700px] relative overflow-x-hidden'>
             {/* 背景模糊晕染球 */}
-            <div className='blur-ball blur-ball-indigo' />
-            <div className='blur-ball blur-ball-teal' />
+            <div className="blur-halo"/>
+            {/* <div className='blur-ball blur-ball-indigo' />
+            <div className='blur-ball blur-ball-teal' /> */}
             <div className='flex items-center justify-center h-full px-4 py-20 md:py-24 lg:py-32 mt-10'>
               {/* 居中内容区 */}
               <div className='flex flex-col items-center justify-center text-center max-w-4xl mx-auto'>
                 <div className='flex flex-col items-center justify-center mb-6 md:mb-8'>
                   <h1
-                    className={`text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-semi-color-text-0 leading-tight ${isChinese ? 'tracking-wide md:tracking-wider' : ''}`}
+                    className={`text-4xl md:text-4xl lg:text-4xl xl:text-5xl font-bold text-black leading-tight ${isChinese ? 'tracking-wide md:tracking-wider' : ''}`}
                   >
                     <>
                       {/* {t('统一的')}
                       <br /> */}
-                      <span className='shine-text'>{t('全球大模型接口平台')}</span>
+                      <span>{t('全球大模型接口平台')}</span>
                     </>
                   </h1>
-                  <p className='text-base md:text-lg lg:text-xl text-semi-color-text-1 mt-4 md:mt-6 max-w-xl'>
-                    {t('更好的价格，更好的稳定性，只需要将模型基址替换为：')}
+                  <p className='text-base md:text-lg lg:text-xl text-semi-color-text-0 mt-4 md:mt-6 max-w-xl'>
+                    {t('一键设置，只需要将模型基址替换为：')}
                   </p>
                   {/* BASE URL 与端点选择 */}
                   <div className='flex flex-col md:flex-row items-center justify-center gap-4 w-full mt-4 md:mt-6 max-w-md'>
@@ -234,15 +237,41 @@ const Home = () => {
                     </Button>
                   </Link>
                 </div>
-
-                {/* 框架兼容性图标 */}
-                <div className='mt-12 md:mt-16 lg:mt-20 w-full'>
-                  <div className='flex items-center mb-6 md:mb-8 justify-center'>
+                
+                <div className='mt-12 md:mt-16 lg:mt-20 w-full bg-gray-50 '>
+                  <hr className="border-t border-gray-200/10 my-8" />
+                  <div className='flex items-center mb-6 md:mb-8 justify-center bg-gray-50'>
                     <Text
                       type='tertiary'
-                      className='text-lg md:text-xl lg:text-2xl font-light'
+                      className='text-lg md:text-xl lg:text-2xl text-semi-color-text-0'
                     >
-                      {t('支持众多的大模型供应商')}
+                      {t('优惠费率')}
+                    </Text>
+                  </div>
+                  <div className='flex items-center mb-6 md:mb-8 justify-center'>
+                    {t('需要确定价格...')}
+                  </div>
+                  <div>
+                  <Link to='/pricing'>
+                    <Button
+                      size={isMobile ? 'default' : 'large'}
+                      className='flex items-center !rounded-3xl px-6 py-2'
+                      icon={<IconSetting />}
+                    >
+                      {t('更多价格')}
+                    </Button>
+                  </Link>
+                  </div>
+                </div>
+                {/* 框架兼容性图标 */}
+                <div className='mt-12 md:mt-16 lg:mt-20 w-full bg-gray-50'>
+                  <hr className="border-t border-gray-200/10 my-8" />
+                  <div className='flex items-center mb-6 md:mb-8 justify-center bg-gray-50'>
+                    <Text
+                      type='tertiary'
+                      className='text-lg md:text-xl lg:text-2xl text-semi-color-text-0'
+                    >
+                      {t('支持最全的国内外大模型')}
                     </Text>
                   </div>
                   <div className='flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto px-4'>

@@ -35,5 +35,5 @@ export const reducer = (state, action) => {
 };
 
 export const initialState = {
-  status: undefined,
+  server_address: "https://llaapi.com"
 };
