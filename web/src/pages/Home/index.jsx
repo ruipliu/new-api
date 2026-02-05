@@ -175,14 +175,20 @@ const Home = () => {
                     <>
                       {/* {t('统一的')}
                       <br /> */}
-                      <span>{t('全球大模型接口平台')}</span>
+                      <span>{t('LLaAPI大模型中转平台')}</span>
                     </>
                   </h1>
                   <p className='text-base md:text-lg lg:text-xl text-semi-color-text-0 mt-4 md:mt-6 max-w-xl'>
-                    {t('一键设置，只需要将模型基址替换为：')}
+                    {t('一站式接入全球各种大模型')}
                   </p>
+                  <p className='text-base md:text-lg lg:text-xl text-semi-color-text-0 mt-4 md:mt-3 max-w-xl'>
+                    {t('明码标价，按量计费，24小时客服在线，可开发票')}
+                  </p>
+                  {/* <p className='text-base md:text-lg lg:text-xl text-semi-color-text-0 mt-4 md:mt-3 max-w-xl'>
+                    {t('24小时客服在线，可开发票')}
+                  </p> */}
                   {/* BASE URL 与端点选择 */}
-                  <div className='flex flex-col md:flex-row items-center justify-center gap-4 w-full mt-4 md:mt-6 max-w-md'>
+                  {/* <div className='flex flex-col md:flex-row items-center justify-center gap-4 w-full mt-4 md:mt-6 max-w-md'>
                     <Input
                       readonly
                       value={serverAddress}
@@ -211,7 +217,7 @@ const Home = () => {
                         </div>
                       }
                     />
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* 操作按钮 */}
@@ -227,7 +233,7 @@ const Home = () => {
                       {t('获取密钥')}
                     </Button>
                   </Link>
-                  <Link to='/docs'>
+                  {/* <Link to='/docs'>
                     <Button
                       size={isMobile ? 'default' : 'large'}
                       className='flex items-center !rounded-3xl px-6 py-2'
@@ -235,10 +241,39 @@ const Home = () => {
                     >
                       {t('文档')}
                     </Button>
-                  </Link>
+                  </Link> */}
                 </div>
-                
-                <div className='mt-12 md:mt-16 lg:mt-20 w-full bg-gray-50 '>
+
+                {/* 我们 */}
+                <div className='mt-6 md:mt-8 lg:mt-10 w-full bg-gray-50 '>
+                  <hr className="border-t border-gray-200/10 my-8" />
+                  <div className='flex items-center mb-6 md:mb-8 justify-center bg-gray-50'>
+                    <Text
+                      type='tertiary'
+                      className='text-lg md:text-xl lg:text-2xl text-semi-color-text-0'
+                    >
+                      {t('关于我们')}
+                    </Text>
+                  </div>
+                  <div className='flex items-center mb-6 md:mb-2 justify-center'>
+                    {t('我们是一家专注中转大模型API的服务平台，一站接入，多模型调用！')}
+                  </div>
+                  <div className='flex items-center mb-6 md:mb-2 justify-center'>
+                    {t('保证100%使用官方企业渠道，全球路线优化，多通道冗余，低延迟，持续在线')}
+                  </div>
+                  {/* <div className='flex items-center mb-6 md:mb-2 justify-center'>
+                    {t('我们只提供中转，请求数据全程直转不存留，隐私安全有保障，放心使用')}
+                  </div> */}
+                  <div className='flex items-center mb-6 md:mb-2 justify-center'>
+                    {t('我们不是噱头平台，只做长期服务，秉承薄利多销的原则，不赚暴利，让开发者用得久，用得起')}
+                  </div>
+                  <div className='flex items-center mb-6 md:mb-2 justify-center'>
+                    {t('注册即送0.3美元免费额度，先试用，再付款，多充多送！')}
+                  </div>
+                </div>
+
+                {/* 价格信息 */}
+                <div className='mt-12 md:mt-16 lg:mt-10 w-full bg-gray-50 '>
                   <hr className="border-t border-gray-200/10 my-8" />
                   <div className='flex items-center mb-6 md:mb-8 justify-center bg-gray-50'>
                     <Text
@@ -263,8 +298,28 @@ const Home = () => {
                   </Link>
                   </div>
                 </div>
+
+                {/* 我们 */}
+                <div className='mt-6 md:mt-8 lg:mt-10 w-full bg-gray-50 '>
+                  <hr className="border-t border-gray-200/10 my-8" />
+                  <div className='flex items-center mb-6 md:mb-8 justify-center bg-gray-50'>
+                    <Text
+                      type='tertiary'
+                      className='text-lg md:text-xl lg:text-2xl text-semi-color-text-0'
+                    >
+                      {t('联系客服')}
+                    </Text>
+                  </div>
+                  <div className='flex items-center mb-6 md:mb-4 justify-center'>
+                    {t('邮箱：llaapi@gmail.com')}
+                  </div>
+                  <div className='flex items-center mb-6 md:mb-4 justify-center'>
+                    {t('微信：llaapimi')}
+                  </div>
+                </div>
+
                 {/* 框架兼容性图标 */}
-                <div className='mt-12 md:mt-16 lg:mt-20 w-full bg-gray-50'>
+                <div className='mt-12 md:mt-16 lg:mt-10 w-full bg-gray-50'>
                   <hr className="border-t border-gray-200/10 my-8" />
                   <div className='flex items-center mb-6 md:mb-8 justify-center bg-gray-50'>
                     <Text
